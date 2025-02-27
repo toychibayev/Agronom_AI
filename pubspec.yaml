@@ -37,6 +37,7 @@ dependencies:
   circular_bottom_navigation: ^2.4.0
   flutter_svg: ^2.0.17
   image_picker: ^1.1.2
+  image: ^4.0.17
 
 dev_dependencies:
   flutter_test:

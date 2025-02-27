@@ -1,17 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageListWidget extends StatelessWidget {
-  const ImageListWidget({super.key});
+  final List<String> images;
+
+  const ImageListWidget({super.key, required this.images});
 
   @override
   Widget build(BuildContext context) {
-    List<String> images = [
-      "assets/imgs/rasm_1.png",
-      "assets/imgs/rasm_2.png",
-      "assets/imgs/rasm_1.png",
-      "assets/imgs/rasm_2.png"
-    ];
-
     return SizedBox(
       height: 400,
       child: ListView.builder(
@@ -20,12 +16,19 @@ class ImageListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Image.asset(
-              images[index],
-              width: 180,
-              height: 400,
-              fit: BoxFit.contain,
-            ),
+            child: images[index].startsWith("assets")
+                ? Image.asset(
+                    images[index],
+                    width: 180,
+                    height: 400,
+                    fit: BoxFit.contain,
+                  )
+                : Image.file(
+                    File(images[index]),
+                    width: 180,
+                    height: 380,
+                    fit: BoxFit.cover,
+                  ),
           );
         },
       ),
