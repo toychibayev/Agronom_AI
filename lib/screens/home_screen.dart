@@ -1,16 +1,15 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, unused_field
 
+import 'dart:developer';
+
+import 'package:agronom_ai/screens/history_screen.dart';
+import 'package:agronom_ai/widgets/imageList_widget.dart';
+import 'package:agronom_ai/widgets/infoCard_widget.dart';
+import 'package:agronom_ai/widgets/userProfile_widget.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomeScreen(),
-  ));
-}
+import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedPos = 0;
   late CircularBottomNavigationController _navigationController;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -40,9 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Icons.home,
       "Home",
       Colors.blue,
-      labelStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
+      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
     ),
     TabItem(
       Icons.camera_alt_outlined,
@@ -56,80 +54,56 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  /// Kamerani ochish va rasm olish funksiyasi
+  Future<void> pickImageFromCamera() async {
+  final ImagePicker _picker = ImagePicker();
+  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+
+  if (image != null) {
+    setState(() {
+      log("Rasm olindi: ${image.path}");
+    });
+  } else {
+    log("Rasm olinmadi");
+  }
+}
+
+
+  void _onTabSelected(int? selectedPos) {
+    setState(() {
+      this.selectedPos = selectedPos ?? 0;
+    });
+
+    if (selectedPos == 1) {
+      pickImageFromCamera(); // Kamera ochish
+    } else if (selectedPos == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HistoryScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-      ),
+      appBar: AppBar(toolbarHeight: 0),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-            child: Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        "assets/imgs/user.png",
-                        fit: BoxFit.contain,
-                        height: 40,
-                        width: 40,
-                      ),
-                      SizedBox(width: 15),
-                      Text(
-                        "Samuel Joe",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SvgPicture.asset(
-                    "assets/svgs/setting.svg",
-                    height: 30,
-                    width: 30,
-                  ),
-                ],
-              ),
-            ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+            child: UserProfileWidget(),
           ),
           Positioned(
             top: 70,
             left: 30,
             right: 30,
-            child: Container(
-              width: 350,
-              height: 155,
-              decoration: BoxDecoration(
-                color: Color(0xff81c784),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "0",
-                    style: TextStyle(fontSize: 45, color: Color(0xFFFFFFFF)),
-                  ),
-                  Text(
-                    "Rasm izlangan",
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: const InfoCardWidget(),
           ),
           Positioned(
             top: 260,
             left: 14,
-            child: Text(
+            child: const Text(
               "Ohirgi qidiruvlar",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -138,30 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 300,
             left: 0,
             right: 0,
-            child: SizedBox(
-              height: 400, // Rasmlarning balandligini moslashtiring
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  List<String> images = [
-                    "assets/imgs/rasm_1.png",
-                    "assets/imgs/rasm_2.png",
-                    "assets/imgs/rasm_1.png",
-                    "assets/imgs/rasm_2.png"
-                  ];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Image.asset(
-                      images[index],
-                      width: 180,
-                      height: 400,
-                      fit: BoxFit.contain,
-                    ),
-                  );
-                },
-              ),
-            ),
+            child: const ImageListWidget(),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -171,18 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
               barHeight: 70,
               circleSize: 60,
               iconsSize: 35,
-              barBackgroundColor: Color(0xFF81C784),
-              normalIconColor: Color(0xFFFFFFFF),
-              backgroundBoxShadow: [
+              barBackgroundColor: const Color(0xFF81C784),
+              normalIconColor: const Color(0xFFFFFFFF),
+              backgroundBoxShadow: const [
                 BoxShadow(color: Colors.black26, blurRadius: 10.0),
               ],
-              selectedCallback: (int? selectedPos) {
-                setState(
-                  () {
-                    this.selectedPos = selectedPos ?? 0;
-                  },
-                );
-              },
+              selectedCallback: _onTabSelected,
             ),
           ),
         ],

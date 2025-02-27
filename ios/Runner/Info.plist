@@ -45,5 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Kamera va galereya uchun ruxsatlar -->
+	<key>NSCameraUsageDescription</key>
+	<string>Ilova kameradan foydalanishi uchun ruxsat kerak.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ilova rasm va videolarni saqlash yoki yuklash uchun foto galereyadan foydalanadi.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Ilova rasmlarni saqlash uchun foto galereyaga ruxsat so'raydi.</string>
+
 </dict>
 </plist>
