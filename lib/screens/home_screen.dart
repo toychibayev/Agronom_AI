@@ -103,9 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (pos == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const HistoryScreen()),
+        MaterialPageRoute(builder: (context) => const HistoryAppBar()),
       ).then((_) => setState(() => _navigationController.value = 0));
-    } else {
+    }else {
       setState(() => selectedPos = pos);
     }
   }

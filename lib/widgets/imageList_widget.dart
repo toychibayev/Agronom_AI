@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class ImageListWidget extends StatelessWidget {
@@ -24,7 +25,9 @@ class ImageListWidget extends StatelessWidget {
                     fit: BoxFit.contain,
                   )
                 : Image.file(
-                    File(images[index]),
+                    File(
+                      images[index],
+                    ),
                     width: 180,
                     height: 380,
                     fit: BoxFit.cover,
